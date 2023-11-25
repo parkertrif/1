@@ -1,12 +1,12 @@
 
-images_1$timestamp <- as.POSIXct(images_1$timestamp, format = "%m/%d/%Y %H:%M") #read timestamp correctly
-images_1$group <- paste(images_1$common_name, images_1$age, images_1$sex) # Add grouping columns
+images$timestamp <- as.POSIXct(images$timestamp, format = "%m/%d/%Y %H:%M") #read timestamp correctly
+images$group <- paste(images$common_name, images$age, images$sex) # Add grouping columns
 
 
 starting with processed images, calculating time since last and filtering unique detections
 
 #split images by placename
-placename_data <- split(images_2, images_2$placename)
+placename_data <- split(images, images$placename)
 
 #loop through each placename
 for(i in seq_along(placename_data)) {
@@ -33,8 +33,8 @@ placename_data[[i]] <- placename_df
 summarize_detections <- function(df) {
 
   df %>%
-    filter(time_since_last > 300 | time_since_last < 0) %>%
-    mutate(detection_id = cumsum(time_since_last > 300 | time_since_last < 0)) %>% 
+    filter(time_since_last > 600 | time_since_last < 0) %>%
+    mutate(detection_id = cumsum(time_since_last > 600 | time_since_last < 0)) %>% 
     group_by(detection_id) %>%
     summarise(
       placename = first(placename),
